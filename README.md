@@ -1,75 +1,55 @@
-# :package_description
+# Centrifuge SDK for the Centrifuge API
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+This is an unofficial Centrifuge PHP SDK. More information on the [official documentation page](https://centrifugal.dev/docs/server/server_api#http-api).
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+## Requirements
 
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+- PHP 8.1+
 
 ## Installation
 
-You can install the package via composer:
-
-```bash
-composer require :vendor_slug/:package_slug
 ```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
+composer require marcosraudkett/centrifuge-php
 ```
+## Usage 
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-This is the contents of the published config file:
-
+Example on how to fetch journeys
+### Journeys
 ```php
-return [
-];
+use Mvrc\CentrifugePhp\CentrifugeConnector;
+use Mvrc\CentrifugePhp\Requests\PublishRequest;
+
+$connector = new CentrifugeConnector;
+$request = new PublishRequest(
+    channel: "private-test",
+    data: [
+        "test" => true
+    ]
+);
+
+$response = $connector->send($request);
+
+print_r($response->json());
+print_r($response->status());
 ```
 
-Optionally, you can publish the views using
+## Available requests
 
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
-```
-
-## Usage
-
-```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
-```
-
-## Testing
-
-```bash
-composer test
-```
+| Request | Description |
+| - | - | 
+| BatchRequest | Batch allows sending many commands in one request. | 
+| BroadcastRequest | broadcast is similar to publish but allows to efficiently send the same data into many channels. | 
+| ChannelsRequest | channels return active channels (with one or more active subscribers in it). | 
+| DisconnectRequest | disconnect allows disconnecting a user by ID. | 
+| HistoryRemoveRequest | history_remove allows removing publications in channel history. | 
+| HistoryRequest | history allows getting channel history information (list of last messages published into the channel). | 
+| InfoRequest | info method allows getting information about running Centrifugo nodes. | 
+| PresenceRequest | presence allows getting channel online presence information (all clients currently subscribed on this channel). | 
+| PresenceStatsRequest | presence_stats allows getting short channel presence information - number of clients and number of unique users (based on user ID). | 
+| PublishRequest | Publish method allows publishing data into a channel (we call this message publication in Centrifugo). Most probably this is a command you'll use most of the time. | 
+| RefreshRequest | refresh allows refreshing user connection (mostly useful when unidirectional transports are used). | 
+| SubscribeRequest | subscribe allows subscribing active user's sessions to a channel. Note, it's mostly for dynamic server-side subscriptions. | 
+| UnsubscribeRequest | unsubscribe allows unsubscribing user from a channel. | 
 
 ## Changelog
 
@@ -77,15 +57,10 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
+Feel free to open a pull request or report an issue.
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Marcos Raudkett](https://github.com/marcosraudkett)
 - [All Contributors](../../contributors)
 
 ## License
